@@ -103,5 +103,8 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# output
+# folder
 output/*
+
+# submodule
+indonesia-stock-exchange.wiki
