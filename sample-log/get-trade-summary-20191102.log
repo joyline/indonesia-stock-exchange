@@ -1,0 +1,2 @@
+2019-11-02 23:41:42,026: Starting new HTTPS connection (1): idx.co.id:443
+2019-11-02 23:41:42,706: https://idx.co.id:443 "GET /umbraco/Surface/TradingSummary/GetStockSummary?date=20191102&start=0&length=659 HTTP/1.1" 200 None
