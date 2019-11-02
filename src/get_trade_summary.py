@@ -13,7 +13,7 @@ from time import sleep
 logfile = date.today().strftime('%Y%m%d')
 logging.basicConfig(
     format='%(asctime)s: %(message)s', 
-    filename=getcwd() + '/logs/{}.log'.format(logfile), 
+    filename=getcwd() + '/logs/get-trade-summary-{}.log'.format(logfile), 
     level=logging.DEBUG
 )
 
