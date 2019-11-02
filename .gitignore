@@ -106,5 +106,5 @@ venv.bak/
 output/*
 logs/*
 
-# submodule
-indonesia-stock-exchange.wiki
+# file
+*.xlsx
