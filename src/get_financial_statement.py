@@ -1,64 +1,62 @@
-import click
+import json
+import logging
+import multiprocessing
 import os
-import pandas as pd
+import requests
+import string
+import sys
 from datetime import date
-from list_of_companies import main as loc
-from urllib import error
-from zipfile import BadZipFile
+from time import sleep
 
-# call a function to get all of publicly listed companies
-LIST_OF_COMPANIES = loc().iloc[:, : 1]
+# create arguments
+YEAR = sys.argv[1]
+AUDITED = sys.argv[2]
+YEARLY = sys.argv[3]
+NUM_POOL = multiprocessing.cpu_count() - int(sys.argv[4])
+NUM_RETRY = int(sys.argv[5])
+SLEEP_TIME = int(sys.argv[6])
+NUM_TIMEOUT = int(sys.argv[7])
 
+# log
+logfile = date.today().strftime('%Y%m%d')
+logging.basicConfig(
+    format='%(asctime)s: %(message)s', 
+    filename=os.getcwd() + '/logs/financial-statement-{}-{}.log'.format(YEAR, AUDITED.lower()), 
+    level=logging.DEBUG
+)
 
-@click.command()
-@click.option('--year', type=int, default=int(date.today().strftime('%Y')) - 1)
-@click.option('--audited', type=str, default='Audit')
-@click.option('--yearly', type=str, default='Tahunan')
-@click.option('--sheet_number', type=int, default=1)
-def main(year=None, audited=None, yearly=None, sheet_number=None):
-    """
-    Returns financial statements (general information, balance sheet, profit/loss statements, cash flow statements)
+# create constants
+OUTPUT_PATH = os.getcwd() + '/output/financial-statement/{}/'.format(YEAR)
+if not os.path.exists(OUTPUT_PATH): os.mkdir(OUTPUT_PATH)
+BASE_URL = 'http://www.idx.co.id/Portals/0/StaticData/ListedCompanies/Corporate_Actions/New_Info_JSX/Jenis_Informasi/01_Laporan_Keuangan/02_Soft_Copy_Laporan_Keuangan//Laporan%20Keuangan%20Tahun%20{0}/{1}/{2}/FinancialStatement-{0}-{3}-{2}.xlsx'
 
-    Args:
-        - year = four digits number (e.g. 2018),
-        - audited = if audited financial report, fill 'Audit', else TW1, TW2, or TW3, for 1st, 2nd, or 3rd quarter, respectively,
-        - yearly = if audited financial report, fill 'Tahunan', else I, II, or III for 1st, 2nd, or 3rd quarter, respectively,
-        - sheet_number =
-            - 1 for general information
-            - 2 for balance sheet
-            - 3 for profit/loss statement
-            - 4 and 5 for changes in equity
-            - 6 for cash flow statement
-    """
+def get_urls():
+    
+    # open json file which contains publicly listed companies in IDX
+    with open(os.getcwd() + '/output/get-companies.json', 'r') as json_file:
+        data = json.load(json_file)
 
-    outputpath = os.getcwd() + '/output/financial-statement/{}/{}/'.format(sheet_number, year)
+    ticker = [list(x.values())[0] for x in data]
+    urls = [BASE_URL.format(YEAR, AUDITED, x, YEARLY) for x in ticker]
 
-    try:
-        if not os.path.exists(outputpath):
-            os.makedirs(outputpath)
-    except:
-        pass
+    return urls
 
-    os.chdir(outputpath)
+def get_financial_statement(urls):
 
-    for i in range(len(LIST_OF_COMPANIES)):
+    file_name = urls.replace('http://www.idx.co.id/Portals/0/StaticData/ListedCompanies/Corporate_Actions/New_Info_JSX/Jenis_Informasi/01_Laporan_Keuangan/02_Soft_Copy_Laporan_Keuangan//Laporan%20Keuangan%20Tahun%20', '')
+    file_name =  file_name.translate(str.maketrans('', '', string.punctuation))
+    i = 0
+    while i < NUM_RETRY:
         try:
-            url = 'http://www.idx.co.id/Portals/0/StaticData/ListedCompanies/Corporate_Actions/New_Info_JSX/Jenis_Informasi/01_Laporan_Keuangan/02_Soft_Copy_Laporan_Keuangan//Laporan%20Keuangan%20Tahun%20{}/{}/{}/FinancialStatement-{}-{}-{}.xlsx'.format(
-                year, audited, LIST_OF_COMPANIES.iloc[i, 0], year, yearly, LIST_OF_COMPANIES.iloc[i, 0])
-            df = pd.ExcelFile(url)
-            df = df.parse(sheet_number)
-            df = df.iloc[:, :2].transpose()
-            df.columns = df.iloc[0]
-            df = df.iloc[1:].reset_index(drop=True)
-            df.to_csv(outputpath + '{}-{}-{}-{}.csv'.format(
-                LIST_OF_COMPANIES.iloc[i, 0], year, audited, sheet_number), index=False)
-        except error.HTTPError:
-            continue
-        except error.URLError:
-            continue
-        except BadZipFile:
-            continue
-
+            response = requests.get(urls, timeout=NUM_TIMEOUT)
+            if response.status_code == 200:
+                with open(OUTPUT_PATH + file_name + '.xlsx', 'wb') as f:
+                    f.write(response.content)
+            i = NUM_RETRY
+        except Exception as e:
+            logging.error('{}: '.format(urls) + e)
+            sleep(SLEEP_TIME)
+            i += 1
 
 if __name__ == "__main__":
-    main()
+    multiprocessing.Pool(NUM_POOL).map(get_financial_statement, get_urls())
