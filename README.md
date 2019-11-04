@@ -32,7 +32,7 @@ python src/get_trading_summary.py [BASE_DATE] [NUM_POOL] [NUM_RETRY] [SLEEP_TIME
 Following is the example:
 
 ```
-pyhon src/get_trading_summary.py 20191104 1 3 30 10
+python src/get_trading_summary.py 20191104 1 3 30 10
 ```
 
 See [wiki](https://github.com/ledwindra/indonesia-stock-exchange/wiki) for details.
