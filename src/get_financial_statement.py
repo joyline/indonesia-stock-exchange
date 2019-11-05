@@ -15,7 +15,7 @@ YEARLY = sys.argv[3]
 NUM_POOL = multiprocessing.cpu_count() - int(sys.argv[4])
 NUM_RETRY = int(sys.argv[5])
 SLEEP_TIME = int(sys.argv[6])
-NUM_TIMEOUT = int(sys.argv[7])
+NUM_TIMEOUT = int(sys.argv[7])  
 
 # log
 logfile = date.today().strftime('%Y%m%d')
@@ -26,8 +26,8 @@ logging.basicConfig(
 )
 
 # create constants
-OUTPUT_PATH = os.getcwd() + '/output/financial-statement/{}/'.format(YEAR)
-if not os.path.exists(OUTPUT_PATH): os.mkdir(OUTPUT_PATH)
+OUTPUT_PATH = os.getcwd() + '/output/financial-statement/{}/{}/'.format(YEAR, AUDITED)
+if not os.path.exists(OUTPUT_PATH): os.makedirs(OUTPUT_PATH)
 BASE_URL = 'http://www.idx.co.id/Portals/0/StaticData/ListedCompanies/Corporate_Actions/New_Info_JSX/Jenis_Informasi/01_Laporan_Keuangan/02_Soft_Copy_Laporan_Keuangan//Laporan%20Keuangan%20Tahun%20{0}/{1}/{2}/FinancialStatement-{0}-{3}-{2}.xlsx'
 
 def get_urls():
