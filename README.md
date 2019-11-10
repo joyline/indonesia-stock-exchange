@@ -2,7 +2,7 @@
 
 ## Intro
 
-This repository aims to get the financial data of publicly listed companies in Indonesia for free (one oof the things you could do especiallly when you're not rich AF) :stuck_out_tongue_closed_eyes:. It includes both technical and fundamental information, such as stock prices (opening, closing, bid, ask, volume, etc) and financial statements (balance sheet, profit and loss, changes in equity, cash flow). Surely the information contained is more diverse than we can find from other free source (e.g. Yahoo! Finance) and far cheaper than using financial terminal (e.g. Bloomberg). 
+This repository aims to get the financial data of publicly listed companies in Indonesia for free (one of the things you could do especiallly when you're not rich AF) :stuck_out_tongue_closed_eyes:. It includes both technical and fundamental information, such as stock prices (opening, closing, bid, ask, volume, etc) and financial statements (balance sheet, profit and loss, changes in equity, cash flow). Surely the information contained is more diverse than we can find from other free source (e.g. Yahoo! Finance) and far cheaper than using financial terminal (e.g. Bloomberg). 
 
 I have only tested this using Python 3.7.3 (:snake:), but it should be fine for any Python 3.x. However, I won't bother testing it using Python 2.x. You can read [wiki](https://github.com/ledwindra/indonesia-stock-exchange/wiki/How-to-Get-Financial-Data-when-You-are-not-Rich-AF) for more details. Or you can visit [my Medium](https://medium.com/@lukmanedwindra/get-financial-information-from-indonesian-publicly-listed-companies-for-free-74870235f783) article related to this repository. I hope this can be useful for your own purpose. :smile:
 
