@@ -66,7 +66,7 @@ sh ./bash/financial-statement.sh [YEAR] [NUM_POOL] [NUM_RETRY] [SLEEP_TIME] [NUM
 And the following:
 
 ```
-financial-statement-dataframe.sh [BEG_YEAR] [END_YEAR]
+sh ./bash/financial-statement-dataframe.sh [BEG_YEAR] [END_YEAR]
 ```
 
 ## End
