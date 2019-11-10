@@ -1,17 +1,14 @@
 #!/bin/bash
-# RUN EXAMPLE
 
 # argument
 YEAR=$1
+AUDITED=(TW1 TW2 TW3 Audit)
+YEARLY=(I II II Tahunan)
+NUM_POOL=$2
+NUM_RETRY=$3
+SLEEP_TIME=$4
+NUM_TIMEOUT=$5
 
-# 1st quarter
-python src/get_financial_statement.py ${YEAR} TW1 I 1 3 30 15
-
-# 2nd quarter
-python src/get_financial_statement.py ${YEAR} TW2 II 1 3 30 15
-
-# 3rd quarter
-python src/get_financial_statement.py ${YEAR} TW3 III 1 3 30 15
-
-# Audit
-python src/get_financial_statement.py ${YEAR} Audit Tahunan 1 3 30 15
+for ((i = 0; i < 4; i++))
+    do python src/get_financial_statement.py ${YEAR} ${AUDITED[i]} ${YEARLY[i]} $NUM_POOL $NUM_RETRY $SLEEP_TIME $NUM_TIMEOUT
+done

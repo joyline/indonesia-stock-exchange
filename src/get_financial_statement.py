@@ -15,7 +15,7 @@ YEARLY = sys.argv[3]
 NUM_POOL = multiprocessing.cpu_count() - int(sys.argv[4])
 NUM_RETRY = int(sys.argv[5])
 SLEEP_TIME = int(sys.argv[6])
-NUM_TIMEOUT = int(sys.argv[7])  
+NUM_TIMEOUT = int(sys.argv[7])
 
 # log
 logfile = date.today().strftime('%Y%m%d')
